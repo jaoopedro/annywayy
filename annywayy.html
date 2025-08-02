@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Annywayy 💜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #fbeeff, #ffe6f0);
+      color: #333;
+      padding: 40px 20px;
+      font-size: 16px;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: #b946cc;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    p.subtitle {
+      text-align: center;
+      font-style: italic;
+      color: #7d3387;
+      margin-bottom: 40px;
+    }
+
+    .search-box {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 60%;
+      max-width: 400px;
+      border: 2px solid #dca0e3;
+      border-radius: 10px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #b946cc;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-left: 10px;
+      background-color: #b946cc;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #a536b9;
+    }
+
+    .result {
+      background-color: #fceeff;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(185, 70, 204, 0.1);
+      animation: slideUp 1s ease;
+    }
+
+    .result h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .result blockquote {
+      font-style: italic;
+      color: #6d2473;
+      margin-bottom: 10px;
+    }
+
+    .spotify-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #9146ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .copy-button {
+      background-color: #f2d1f7;
+      color: #5b005b;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .copy-button:hover {
+      background-color: #e5bbea;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    audio {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      color: #b48add;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Annywayy 💖</h1>
+  <p class="subtitle">Frases que tocam — e você copia ✨</p>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Ex: lover, espresso, feather..." />
+    <button onclick="searchLyrics()">Buscar</button>
+  </div>
+
+  <div id="results"></div>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_bfa4970e9b.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <footer>
+    de Pedro para você 💌
+  </footer>
+
+  <script>
+    const lyricsData = [
+      {
+        artist: "Taylor Swift",
+        song: "Lover",
+        quote: "Can I go where you go?",
+        link: "https://open.spotify.com/track/1dGr1c8CrMLDpV6mPbImSI"
+      },
+      {
+        artist: "Sabrina Carpenter",
+        song: "Espresso",
+        quote: "I’m working late ‘cause I’m a singer",
+        link: "https://open.spotify.com/track/2Us4R4OeOqWbJBkS4Zzsl6"
+      },
+      {
+        artist: "Taylor Swift",
+        song: "Enchanted",
+        quote: "This night is sparkling, don't you let it go",
+        link: "https://open.spotify.com/track/5enxwA8aAbwZbf5qCHORXi"
+      },
+      {
+        artist: "Sabrina Carpenter",
+        song: "Feather",
+        quote: "I feel so much lighter like a feather with you gone",
+        link: "https://open.spotify.com/track/1tknQ2mQocjRSrMkwUdMEm"
+      },
+      {
+        artist: "Taylor Swift",
+        song: "All Too Well",
+        quote: "You kept me like a secret, but I kept you like an oath",
+        link: "https://open.spotify.com/track/5enxwA8aAbwZbf5qCHORXi"
+      }
+    ];
+
+    function searchLyrics() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      const filtered = lyricsData.filter(item =>
+        item.quote.toLowerCase().includes(searchTerm) ||
+        item.song.toLowerCase().includes(searchTerm) ||
+        item.artist.toLowerCase().includes(searchTerm)
+      );
+
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = "<p style='text-align:center; color: #888;'>Nenhuma frase encontrada 😢</p>";
+        return;
+      }
+
+      filtered.forEach(result => {
+        const div = document.createElement("div");
+        div.className = "result";
+        div.innerHTML = `
+          <h2>${result.artist} - ${result.song}</h2>
+          <blockquote>“${result.quote}”</blockquote>
+          <a href="${result.link}" target="_blank" class="spotify-link">🎧 Anny deseja ouvir no Spotify</a><br>
+          <button class="copy-button" onclick="copyText('${result.quote}')">📋 Copiar frase</button>
+        `;
+        resultsDiv.appendChild(div);
+      });
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Frase copiada com amor 💘");
+      });
+    }
+  </script>
+</body>
+</html>
